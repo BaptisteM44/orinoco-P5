@@ -1,5 +1,4 @@
 const productId = window.location.search.substr(1);
-console.log(productId);
 
 fetch(`http://localhost:3000/api/furniture/${productId}`)
   .then((response) => response.json())
@@ -42,7 +41,6 @@ fetch(`http://localhost:3000/api/furniture/${productId}`)
     positionElementQuantite.innerHTML = structureQuantité;
     //Selection du bouton Ajouter au panier
     const btn_envoyerPanier = document.querySelector("#btn-envoyer");
-    console.log(btn_envoyerPanier);
 
     //Ecouter le bouton et envoyer le panier
     btn_envoyerPanier.addEventListener("click", (event) => {
@@ -76,10 +74,12 @@ fetch(`http://localhost:3000/api/furniture/${productId}`)
           window.location.href = "index.html";
         }
       };
+
       // vérifie s'il est déja présent
       // si oui, dejaPresent en true et sauvegarde sa place dans le localStorage
       let isAlreadyPresent = false;
       let indexModification;
+
       for (products of itemStorage) {
         switch (products.name) {
           case produitSelection.name:
@@ -94,10 +94,10 @@ fetch(`http://localhost:3000/api/furniture/${productId}`)
           +itemStorage[indexModification].quantity + +produitSelection.quantity;
         localStorage.setItem("produit", JSON.stringify(itemStorage));
         popupConfirmation();
+        itemStorage = [];
         // si non, ajoute le produit au localStorage
       } else {
         itemStorage.push(produitSelection);
-        itemStorage = [];
 
         //transformation en JSON et envoi dans la key "produit" du localStorage
         localStorage.setItem("produit", JSON.stringify(itemStorage));
