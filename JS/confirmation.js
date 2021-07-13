@@ -1,22 +1,28 @@
-//Récupération des différents éléments dans le localStorage afin de les afficher sur la page confirmation
-const response = JSON.parse(localStorage.getItem("response"));
-const orderId = JSON.parse(localStorage.getItem("orderId"));
-let html = "";
+//Récupération de l'id de la commande dans le Local storage
+const responseId = localStorage.getItem("responseId");
 
-html += `
-    <h2>Confirmation de la commande</h2>
-    <ul>
-        <li class="puce">Vos coordonnées</li>
-        <li class="puce">Prénom: ${response.firstName}</li>
-        <li class="puce">Nom: ${response.lastName}</li>
-        <li class="puce">Adresse: ${response.address}</li>
-        <li class="puce">Ville: ${response.city}</li>
-        <li class="puce">Email: ${response.email}</li>
-    </ul>
-    <h3>Total: ${prixTotal / 100} €</h3>
-    <h3>Numéro de la commande: </br> ${orderId}</h3>`;
-document.getElementById("order_confirmed").innerHTML = html;
+//récupération du prix total de la commande
+const prixFinal = localStorage.getItem("prixFinal");
 
-localStorage.removeItem("response");
-localStorage.removeItem("prixTotal");
-localStorage.removeItem("orderId");
+//La structure HTML de la page confirmation
+const positionElement2 = document.querySelector("#container-commande");
+
+const structureConfirmation = `
+  <h2>Merci pour votre commande</h2>
+  <div class="recapCommande">
+    <p class="txt">Votre commande numéro: <span>${responseId}</span> a bien été prise en compte</p>
+    <p class="txt">Le total de votre commande: <span>${prixFinal} €</span></p>
+  </div>`;
+
+//Injection HTML
+positionElement2.insertAdjacentHTML("afterbegin", structureConfirmation);
+
+//effacer le localStorage sauf le formulaire
+
+function deleteLocalStorage(key) {
+  localStorage.removeItem(key);
+}
+
+deleteLocalStorage("prixFinal");
+deleteLocalStorage("produit");
+deleteLocalStorage("responseId");

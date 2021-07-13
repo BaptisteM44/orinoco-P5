@@ -1,10 +1,13 @@
 let produitSelection = JSON.parse(window.localStorage.getItem("produit"));
 //JSON.parse convertir les données au format JSON en objet JS
-
+// let itemStorage = JSON.parse(window.localStorage.getItem("name", "price"));
+// console.log(itemStorage, "ok");
 //affichage des produits du panier
+
 const positionElement = document.querySelector("#container-produit-panier");
 
 //si le panier est vide : afficher le panier est vide
+
 if (produitSelection === null || produitSelection == 0) {
   const panierVide = `
             <p>PANIER VIDE</p>`;
@@ -215,6 +218,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
       return false;
     }
   }
+  //contrôle validité avant envoi localStorage
   if (
     prenomControle() &&
     nomControle() &&
@@ -223,22 +227,27 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     adresseControle()
   ) {
     localStorage.setItem("formulaireValues", JSON.stringify(formulaireValues));
+    localStorage.setItem("prixFinal", JSON.stringify(prixFinal));
+    console.log("prixFinal", prixFinal);
+
+    const envoiInfo = {
+      contact: {
+        firstName: formulaireValues.firstname,
+        lastName: formulaireValues.name,
+        address: formulaireValues.address,
+        city: formulaireValues.city,
+        email: formulaireValues.email,
+      },
+      products: (formulaireValues.id = []),
+    };
+    envoieVersServeur(envoiInfo);
   } else {
     alert("veuillez bien remplir le formulaire");
   }
   // -------------FIN VALIDATION DU FORMULAIRE--------------
-  console.log(formulaireValues);
-  const envoiInfo = {
-    contact: {
-      firstName: formulaireValues.firstname,
-      lastName: formulaireValues.name,
-      address: formulaireValues.address,
-      city: formulaireValues.city,
-      email: formulaireValues.email,
-    },
-    products: ["5be9cc611c9d440000c1421e"],
-  };
-  console.log(envoiInfo);
+});
+
+function envoieVersServeur(envoiInfo) {
   // Envoie de l'objet "envoiInfo" vers l'API
   const promise01 = fetch("http://localhost:3000/api/furniture/order/", {
     method: "POST",
@@ -247,18 +256,36 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
       "Content-Type": "application/json",
     },
   });
+  //pour voir le résultat du serveur dans la console
   promise01.then(async (response) => {
+    //si la promesse n'est pas résolu, si elle est rejeté - gestion des erreurs
     try {
       console.log("response");
       console.log(response);
 
       const contenu = await response.json();
       console.log(contenu);
+      if (response.ok) {
+        console.log(`resultat de response.ok ${response.ok}`);
+
+        //récupération de l'ID de la response du serveur
+        console.log("id du serveur");
+        console.log(contenu.orderId);
+
+        localStorage.setItem("responseId", contenu.orderId);
+        //aller vers la page confirmation commande
+        window.location = "confirmation.html";
+      } else {
+        console.log(`réponse du serveur ${response.status}`);
+        alert(`Problème avec le serveur ${response.status}`);
+      }
     } catch (e) {
       console.log(e);
+      console.log("Erreur qui vient du catch()");
+      alert(`erreur qui vient du catch() ${e}`);
     }
   });
-});
+}
 
 // -----Mettre le contenu du localStorage dans les champs du formulaire----
 const dataLocalStorage = localStorage.getItem("formulaireValues");

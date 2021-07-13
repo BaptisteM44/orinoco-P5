@@ -97,6 +97,7 @@ fetch(`http://localhost:3000/api/furniture/${productId}`)
         // si non, ajoute le produit au localStorage
       } else {
         itemStorage.push(produitSelection);
+        itemStorage = [];
 
         //transformation en JSON et envoi dans la key "produit" du localStorage
         localStorage.setItem("produit", JSON.stringify(itemStorage));
