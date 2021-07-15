@@ -25,9 +25,4 @@ fetch("http://localhost:3000/api/furniture")
     }
 
     document.getElementById("meubles").innerHTML = html;
-  })
-
-  // Message d'erreur
-  .catch((e) => {
-    errorMessage();
   });

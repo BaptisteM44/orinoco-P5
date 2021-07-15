@@ -1,9 +1,7 @@
-let produitSelection = JSON.parse(window.localStorage.getItem("produit"));
 //JSON.parse convertir les données au format JSON en objet JS
-// let itemStorage = JSON.parse(window.localStorage.getItem("name", "price"));
-// console.log(itemStorage, "ok");
-//affichage des produits du panier
+let produitSelection = JSON.parse(window.localStorage.getItem("produit"));
 
+//affichage des produits du panier
 const positionElement = document.querySelector("#container-produit-panier");
 
 //si le panier est vide : afficher le panier est vide

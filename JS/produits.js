@@ -79,7 +79,6 @@ fetch(`http://localhost:3000/api/furniture/${productId}`)
       // si oui, dejaPresent en true et sauvegarde sa place dans le localStorage
       let isAlreadyPresent = false;
       let indexModification;
-
       for (products of itemStorage) {
         switch (products.name) {
           case produitSelection.name:
